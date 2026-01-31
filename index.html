@@ -7,10 +7,11 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
-  background: #f0f0f2; /* 莫兰迪浅灰背景 */
-  color: #4a4a4a;
+  background: transparent; /* 保持透明，融入 Notion 深色背景 */
+  color: #f0e6e6; /* 浅灰粉文字 */
 }
 
+/* 页面主体 */
 .wrapper {
   max-width: 900px;
   margin: 0 auto;
@@ -22,11 +23,11 @@ h2 {
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 16px;
-  text-align: left; 
-  color: #59575c; /* 莫兰迪深灰 */
+  text-align: left;
+  color: #e0d6d6; /* 莫兰迪灰粉色 */
 }
 
-/* 时钟区域 */
+/* 双时钟区域 */
 .time-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -37,14 +38,14 @@ h2 {
 .clock-card {
   border-radius: 16px;
   padding: 24px;
-  background: #e7dfe0; /* 莫兰迪灰粉色卡片 */
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  background: #2b2628; /* 深灰粉色卡片 */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   text-align: center;
 }
 
 .location {
   font-size: 14px;
-  color: #7d7a7f;
+  color: #b8a9a9; /* 莫兰迪灰粉 */
   margin-bottom: 12px;
 }
 
@@ -53,18 +54,18 @@ h2 {
   font-weight: 700;
   letter-spacing: 1px;
   margin-bottom: 8px;
-  color: #3c3a3d;
+  color: #f0e6e6; /* 浅灰粉 */
 }
 
 .status {
   font-size: 14px;
-  color: #7d7a7f;
+  color: #d8c6c6;
 }
 
 .diff {
   margin-bottom: 32px;
   font-size: 15px;
-  color: #5a585b;
+  color: #c8b6b6;
 }
 
 /* 内容区域 */
@@ -80,14 +81,14 @@ ul {
 li {
   margin-bottom: 6px;
   font-size: 14px;
-  color: #4a4a4a;
+  color: #e0d6d6;
 }
 
 /* 留给彼此标题前标签 */
 .label {
   display: inline-block;
-  background: #d8b4b4; /* 莫兰迪灰粉色标签 */
-  color: #5a3e3e;
+  background: #5a484a; /* 深灰粉色标签 */
+  color: #f0e6e6;
   font-size: 12px;
   font-weight: 500;
   padding: 2px 8px;
@@ -97,7 +98,7 @@ li {
 
 /* 时间轴 */
 .timeline {
-  border-left: 2px solid #d1d0d3;
+  border-left: 2px solid #5a484a; /* 深灰线 */
   padding-left: 16px;
   position: relative;
 }
@@ -115,18 +116,18 @@ li {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #9e9a9d;
+  background: #7a6264; /* 点颜色 */
 }
 
 .event-time {
   font-size: 13px;
-  color: #7d7a7f;
+  color: #b8a9a9;
   margin-bottom: 4px;
 }
 
 .event-desc {
   font-size: 14px;
-  color: #4a4a4a;
+  color: #e0d6d6;
 }
 </style>
 </head>
@@ -136,13 +137,13 @@ li {
 
   <div class="time-row">
     <div class="clock-card">
-      <div class="location">🇨🇳 中国（蕾蕾） · 北京时间</div>
+      <div class="location">🇨🇳 中国 · 北京时间</div>
       <div class="time" id="cnTime">--:--</div>
       <div class="status" id="cnStatus"></div>
     </div>
 
     <div class="clock-card">
-      <div class="location">🇬🇧 英国（卡卡） · 当地时间</div>
+      <div class="location">🇬🇧 英国 · 当地时间</div>
       <div class="time" id="ukTime">--:--</div>
       <div class="status" id="ukStatus"></div>
     </div>
@@ -202,7 +203,7 @@ function update() {
   document.getElementById("ukStatus").textContent = getStatus(uk.getHours());
 
   document.getElementById("timeDiff").textContent =
-    "中国时间比英国快 8 小时，我们的一天并不同步。";
+    "中国时间比英国快 8 小时，我们的一天并不是同步的。";
 
   const timeline = document.getElementById("timeline");
   timeline.innerHTML = `
@@ -214,9 +215,9 @@ function update() {
       </div>
     </div>
     <div class="event">
-      <div class="event-time">小贴士</div>
+      <div class="event-time">重叠清醒时间</div>
       <div class="event-desc">
-        要记得异地恋的我们需要更多更多的爱来维系这段感情，请记得给彼此多些耐心。
+        我们可以选择陪伴、聊天、分享、玩游戏而不是争吵。
       </div>
     </div>
   `;
