@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>我们共享的时间</title>
+<style>
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+  background: #f0f0f2; /* 莫兰迪浅灰背景 */
+  color: #4a4a4a;
+}
+
+.wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+/* 标题靠左 */
+h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: left; 
+  color: #59575c; /* 莫兰迪深灰 */
+}
+
+/* 时钟区域 */
+.time-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.clock-card {
+  border-radius: 16px;
+  padding: 24px;
+  background: #e7dfe0; /* 莫兰迪灰粉色卡片 */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.location {
+  font-size: 14px;
+  color: #7d7a7f;
+  margin-bottom: 12px;
+}
+
+.time {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  color: #3c3a3d;
+}
+
+.status {
+  font-size: 14px;
+  color: #7d7a7f;
+}
+
+.diff {
+  margin-bottom: 32px;
+  font-size: 15px;
+  color: #5a585b;
+}
+
+/* 内容区域 */
+.section {
+  margin-bottom: 32px;
+}
+
+ul {
+  padding-left: 20px;
+  margin: 8px 0 0 0;
+}
+
+li {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #4a4a4a;
+}
+
+/* 留给彼此标题前标签 */
+.label {
+  display: inline-block;
+  background: #d8b4b4; /* 莫兰迪灰粉色标签 */
+  color: #5a3e3e;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-right: 8px;
+}
+
+/* 时间轴 */
+.timeline {
+  border-left: 2px solid #d1d0d3;
+  padding-left: 16px;
+  position: relative;
+}
+
+.event {
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.event::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #9e9a9d;
+}
+
+.event-time {
+  font-size: 13px;
+  color: #7d7a7f;
+  margin-bottom: 4px;
+}
+
+.event-desc {
+  font-size: 14px;
+  color: #4a4a4a;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <h2>⏳ 我们共享的时间</h2>
+
+  <div class="time-row">
+    <div class="clock-card">
+      <div class="location">🇨🇳 中国（蕾蕾） · 北京时间</div>
+      <div class="time" id="cnTime">--:--</div>
+      <div class="status" id="cnStatus"></div>
+    </div>
+
+    <div class="clock-card">
+      <div class="location">🇬🇧 英国（卡卡） · 当地时间</div>
+      <div class="time" id="ukTime">--:--</div>
+      <div class="status" id="ukStatus"></div>
+    </div>
+  </div>
+
+  <div class="diff" id="timeDiff"></div>
+
+  <div class="section">
+    <h2>📋 日常正在发生的事</h2>
+    <ul>
+      <li>上课 / 学习</li>
+      <li>吃饭</li>
+      <li>采购生活必需品</li>
+      <li>和朋友见面、聊天</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2><span class="label">💞</span>留给彼此的时间</h2>
+    <ul>
+      <li>一起视频八卦</li>
+      <li>一起玩游戏</li>
+      <li>倾诉压力、分享快乐</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🕰 同一时刻，不同状态</h2>
+    <div class="timeline" id="timeline"></div>
+  </div>
+</div>
+
+<script>
+function formatTime(date, offset) {
+  const utc = date.getTime() + date.getTimezoneOffset() * 60000;
+  return new Date(utc + offset * 3600000);
+}
+
+function getStatus(hour) {
+  if (hour >= 6 && hour < 9) return "正在醒来";
+  if (hour >= 9 && hour < 12) return "学习 / 工作";
+  if (hour >= 12 && hour < 14) return "吃饭 / 短暂休息";
+  if (hour >= 14 && hour < 18) return "继续学习 / 工作";
+  if (hour >= 18 && hour < 22) return "放松、娱乐、社交";
+  return "已经入睡";
+}
+
+function update() {
+  const now = new Date();
+  const cn = formatTime(now, 8);
+  const uk = formatTime(now, 0);
+
+  document.getElementById("cnTime").textContent = cn.toTimeString().slice(0,5);
+  document.getElementById("ukTime").textContent = uk.toTimeString().slice(0,5);
+
+  document.getElementById("cnStatus").textContent = getStatus(cn.getHours());
+  document.getElementById("ukStatus").textContent = getStatus(uk.getHours());
+
+  document.getElementById("timeDiff").textContent =
+    "中国时间比英国快 8 小时，我们的一天并不同步。";
+
+  const timeline = document.getElementById("timeline");
+  timeline.innerHTML = `
+    <div class="event">
+      <div class="event-time">现在</div>
+      <div class="event-desc">
+        中国：${getStatus(cn.getHours())}<br/>
+        英国：${getStatus(uk.getHours())}
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-time">小贴士</div>
+      <div class="event-desc">
+        要记得异地恋的我们需要更多更多的爱来维系这段感情，请记得给彼此多些耐心。
+      </div>
+    </div>
+  `;
+}
+
+update();
+setInterval(update, 60000);
+</script>
+</body>
+</html>
